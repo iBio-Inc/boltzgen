@@ -1,0 +1,41 @@
+{
+  "name": "BoltzGen Development Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "args": {
+      "USERNAME": "boltzgen",
+      "USER_UID": "1000",
+      "USER_GID": "1000"
+    }
+  },
+  "runArgs": [
+    "--gpus=all",
+    "--shm-size=8gb"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.cache,target=/home/boltzgen/.cache,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/data,target=/home/boltzgen/data,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "pip install --no-cache-dir -e /workspace",
+  "postStartCommand": "echo 'BoltzGen devcontainer ready! Run \"boltzgen --help\" to get started.'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.linting.enabled": true,
+        "python.formatting.provider": "none"
+      }
+    }
+  },
+  "remoteUser": "boltzgen",
+  "workspaceFolder": "/workspace",
+  "remoteEnv": {
+    "HF_HOME": "/home/boltzgen/.cache"
+  }
+}
